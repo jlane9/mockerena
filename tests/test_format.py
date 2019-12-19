@@ -59,7 +59,7 @@ def test_generate_xml_template_no_columns():
 
 @pytest.mark.file_format
 def test_generate_xml_data(client: Eve, sample_schema: dict):
-    """Test to xml can be generated
+    """Test to ensure xml can be generated
 
     :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
@@ -77,7 +77,7 @@ def test_generate_xml_data(client: Eve, sample_schema: dict):
 
 @pytest.mark.file_format
 def test_generate_xml_with_default_root(client: Eve, sample_schema: dict):
-    """Test to xml can be generated without specifying a root
+    """Test to ensure xml can be generated without specifying a root
 
     :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
@@ -94,7 +94,7 @@ def test_generate_xml_with_default_root(client: Eve, sample_schema: dict):
 
 @pytest.mark.file_format
 def test_generate_xml_with_nested(client: Eve, sample_schema: dict):
-    """Test to xml can be generated with nested values
+    """Test to ensure xml can be generated with nested values
 
     :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
@@ -134,7 +134,7 @@ def test_generate_xml_not_nested(client: Eve, sample_schema: dict):
 
 @pytest.mark.file_format
 def test_generate_xml_with_empty_root(client: Eve, sample_schema: dict):
-    """Test to xml can be generated with an empty root
+    """Test to ensure xml can be generated with an empty root
 
     :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data

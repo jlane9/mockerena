@@ -144,7 +144,14 @@ def format_output(mock: dict, schema: dict, size: int = DEFAULT_SIZE) -> tuple: 
 
     elif file_format == 'sql':
 
-        def get_row(row):
+        def get_row(row: int) -> Any:
+            """Get row data from dataset
+
+            :param int row: Row number
+            :return: Row data
+            :rtype: Any
+            """
+
             return tuple([mock[column][row] for column in mock.keys()])
 
         table_name = schema.get('table_name', 'EXAMPLE_DATA')
