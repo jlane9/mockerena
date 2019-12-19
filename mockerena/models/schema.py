@@ -5,9 +5,13 @@
 """
 
 from copy import deepcopy
+from mockerena.auth import MockerenaTokenAuth
+from mockerena.models.common import BOOLEAN, STRING
 
 
 SCHEMA = {
+    "auth_field": "creator",
+    "authentication": MockerenaTokenAuth,
     "item_title": "schema",
     "schema": {
         "schema": {
@@ -31,34 +35,32 @@ SCHEMA = {
             "minlength": 3,
             "maxlength": 64
         },
-        "include_header": {"type": "boolean"},
-        "exclude_null": {"type": "boolean"},
-        "is_nested": {"type": "boolean"},
-        "delimiter": {"type": "string"},
-        "key_separator": {"type": "string"},
-        "quote_character": {"type": "string"},
-        "template": {"type": "string"},
-        "root_node": {"type": "string"},
-        "table_name": {
-            "type": "string"
-        },
+        "include_header": BOOLEAN,
+        "exclude_null": BOOLEAN,
+        "is_nested": BOOLEAN,
+        "delimiter": STRING,
+        "key_separator": STRING,
+        "quote_character": STRING,
+        "template": STRING,
+        "root_node": STRING,
+        "table_name": STRING,
         "columns": {
             "type": "list",
             "schema": {
                 "type": "dict",
                 "schema": {
-                    "type": {"type": "string"},
-                    "name": {"type": "string"},
-                    "format": {"type": "string"},
+                    "type": STRING,
+                    "name": STRING,
+                    "format": STRING,
                     "args": {"type": "dict"},
                     "percent_empty": {
                         "type": "float",
                         "min": 0,
                         "max": 1
                     },
-                    "truncate": {"type": "boolean"},
-                    "function": {"type": "string"},
-                    "description": {"type": "string"}
+                    "truncate": BOOLEAN,
+                    "function": STRING,
+                    "description": STRING
                 }
             }
         },

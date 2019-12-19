@@ -32,6 +32,178 @@ TEMPLATE = {
         "application/xml"
     ],
     "paths": {
+        "/api/account": {
+            "get": {
+                "summary": "Retrieves one or more account",
+                "responses": {
+                    "200": {
+                        "description": "An array of account",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/account"
+                            }
+                        }
+                    },
+                    "301": {
+                        "$ref": "#/responses/movedPermanently"
+                    },
+                    "500": {
+                        "$ref": "#/responses/internalServerError"
+                    }
+                },
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/projection"
+                    }
+                ],
+                "tags": [
+                    "account"
+                ]
+            }
+        },
+        "/api/account/{account_id}": {
+            "get": {
+                "summary": "Retrieves an account document",
+                "responses": {
+                    "200": {
+                        "description": "account document fetched successfully",
+                        "schema": {
+                            "$ref": "#/definitions/account"
+                        }
+                    },
+                    "301": {
+                        "$ref": "#/responses/movedPermanently"
+                    },
+                    "404": {
+                        "$ref": "#/responses/notFound"
+                    },
+                    "500": {
+                        "$ref": "#/responses/internalServerError"
+                    }
+                },
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/account_id"
+                    }
+                ],
+                "tags": [
+                    "account"
+                ]
+            },
+            "put": {
+                "summary": "Replaces an account document",
+                "responses": {
+                    "200": {
+                        "description": "account document replaced successfully"
+                    },
+                    "301": {
+                        "$ref": "#/responses/movedPermanently"
+                    },
+                    "404": {
+                        "$ref": "#/responses/notFound"
+                    },
+                    "500": {
+                        "$ref": "#/responses/internalServerError"
+                    }
+                },
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/account_id"
+                    },
+                    {
+                        "in": "body",
+                        "name": "account",
+                        "required": True,
+                        "schema": {
+                            "$ref": "#/definitions/account"
+                        }
+                    },
+                    {
+                        "in": "header",
+                        "name": "If-Match",
+                        "description": "Current value of the _etag field",
+                        "required": True,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "account"
+                ]
+            },
+            "patch": {
+                "summary": "Updates an account document",
+                "responses": {
+                    "200": {
+                        "description": "account document updated successfully"
+                    },
+                    "301": {
+                        "$ref": "#/responses/movedPermanently"
+                    },
+                    "404": {
+                        "$ref": "#/responses/notFound"
+                    },
+                    "500": {
+                        "$ref": "#/responses/internalServerError"
+                    }
+                },
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/account_id"
+                    },
+                    {
+                        "in": "body",
+                        "name": "account",
+                        "required": True,
+                        "schema": {
+                            "$ref": "#/definitions/account"
+                        }
+                    },
+                    {
+                        "in": "header",
+                        "name": "If-Match",
+                        "description": "Current value of the _etag field",
+                        "required": True,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "account"
+                ]
+            },
+            "delete": {
+                "summary": "Deletes an account document",
+                "responses": {
+                    "204": {
+                        "description": "account document deleted successfully"
+                    },
+                    "301": {
+                        "$ref": "#/responses/movedPermanently"
+                    },
+                    "404": {
+                        "$ref": "#/responses/notFound"
+                    },
+                    "500": {
+                        "$ref": "#/responses/internalServerError"
+                    }
+                },
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/account_id"
+                    },
+                    {
+                        "in": "header",
+                        "name": "If-Match",
+                        "description": "Current value of the _etag field",
+                        "required": True,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "account"
+                ]
+            }
+        },
         "/api/schema": {
             "get": {
                 "summary": "Retrieves one or more schema",
@@ -231,6 +403,36 @@ TEMPLATE = {
                 ]
             }
         },
+        "/api/user": {
+            "post": {
+                "summary": "Stores one or more user",
+                "security": [{"BearerToken": []}],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "user",
+                        "required": True,
+                        "schema": {
+                            "$ref": "#/definitions/user"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "operation has been successful"
+                    },
+                    "301": {
+                        "$ref": "#/responses/movedPermanently"
+                    },
+                    "500": {
+                        "$ref": "#/responses/internalServerError"
+                    }
+                },
+                "tags": [
+                    "user"
+                ]
+            }
+        },
         "/environment": {
             "get": {
                 "summary": "Retrieves environment information for service",
@@ -271,6 +473,27 @@ TEMPLATE = {
         }
     },
     "definitions": {
+        "account": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "email",
+                "username"
+            ]
+        },
         "schema": {
             "type": "object",
             "properties": {
@@ -426,6 +649,31 @@ TEMPLATE = {
             },
             "required": [
                 "schema"
+            ]
+        },
+        "user": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "email",
+                "username",
+                "password"
             ]
         },
         "environment": {
@@ -595,7 +843,7 @@ TEMPLATE = {
                 "version"
             ]
         },
-        "notFound": {
+        "exception": {
             "type": "object",
             "properties": {
                 "_status": {
@@ -620,9 +868,23 @@ TEMPLATE = {
         }
     },
     "parameters": {
+        "account_id": {
+            "in": "path",
+            "name": "account_id",
+            "required": True,
+            "type": "string",
+            "format": "objectid"
+        },
         "schema_id": {
             "in": "path",
             "name": "schema_id",
+            "required": True,
+            "type": "string",
+            "format": "objectid"
+        },
+        "user_id": {
+            "in": "path",
+            "name": "user_id",
             "required": True,
             "type": "string",
             "format": "objectid"
@@ -692,19 +954,39 @@ TEMPLATE = {
         },
         "internalServerError": {
             "description": "The server encountered an internal error and was unable to complete your request. "
-                           "Either the server is overloaded or there is an error in the application."
+                           "Either the server is overloaded or there is an error in the application.",
+            "schema": {
+                "$ref": "#/definitions/exception"
+            }
+
         },
         "notFound": {
             "description": "Resource was not found",
             "schema": {
-                "$ref": "#/definitions/notFound"
+                "$ref": "#/definitions/exception"
             }
 
         }
     },
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
+        },
+        "BearerToken": {
+            "type": "apiKey",
+            "in": "header",
+            "name": "Authorization"
+        }
+    },
     "tags": [
         {
+            "name": "account"
+        },
+        {
             "name": "schema"
+        },
+        {
+            "name": "user"
         },
         {
             "name": "generate"

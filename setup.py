@@ -49,7 +49,9 @@ setup(
         "Jinja2>=2.10",
         "jsonschema>=2.6.0,<3.0.0",
         "pandas>=0.25.0",
+        "py-bcrypt>=0.4",
         "py-healthcheck>=1.9.0",
+        "pyjwt>=1.7.1",
         "simplejson>=3.16.0",
         "Werkzeug==0.15.4"
     ],

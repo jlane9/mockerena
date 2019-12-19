@@ -7,6 +7,7 @@
 
 """
 
+from datetime import datetime, timedelta
 import inspect
 import json
 import logging
@@ -20,24 +21,38 @@ from faker.providers import BaseProvider
 from flasgger import Swagger, swag_from
 from flask import abort, jsonify, request, render_template
 from healthcheck import HealthCheck, EnvironmentDump
+import jwt
 from pymongo.errors import ServerSelectionTimeoutError
+from werkzeug.exceptions import HTTPException
 
 from mockerena import __author__, __email__, __version__
+from mockerena.auth import MockerenaBasicAuth, hash_password
 from mockerena.errors import ERROR_404, ERROR_422
 from mockerena.format import format_output
 from mockerena.generate import fake, generate_data, make_safe
 from mockerena.models.schema import CUSTOM_SCHEMA
+from mockerena.models.user import default_current_user, verify_is_user
 from mockerena.settings import DEBUG, DEFAULT_FILE_FORMAT, DEFAULT_INCLUDE_HEAD, DEFAULT_SIZE, \
     DEFAULT_QUOTE_CHARACTER, DEFAULT_EXCLUDE_NULL, DEFAULT_DELIMITER, DEFAULT_KEY_SEPARATOR, \
-    DEFAULT_IS_NESTED, DEFAULT_RESPONSES, ENV, HOST, PORT, SECRET_KEY
+    DEFAULT_IS_NESTED, DEFAULT_RESPONSES, ENV, HOST, PORT, SECRET_KEY, URL_PREFIX
 from mockerena.swagger import TEMPLATE
+from mockerena.utils import return_one, strip_creator
 
 
-app = Eve(__name__, settings=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'settings.py'))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+app = Eve(__name__, settings=os.path.join(BASE_DIR, 'settings.py'), auth=MockerenaBasicAuth)
 envdump = EnvironmentDump(include_python=False, include_process=False)
 health = HealthCheck()
 swagger = Swagger(app, template=TEMPLATE)
 app.config.update(ENV=ENV, DEBUG=DEBUG, SECRET_KEY=SECRET_KEY)
+
+app.on_insert_user += hash_password  # pylint: disable=no-member
+app.on_post_GET_account += return_one  # pylint: disable=no-member
+app.on_pre_GET_account += verify_is_user  # pylint: disable=no-member
+app.on_pre_GET_account += default_current_user  # pylint: disable=no-member
+app.on_pre_DELETE_account += verify_is_user  # pylint: disable=no-member
+app.on_pre_PATCH_account += verify_is_user  # pylint: disable=no-member
+app.on_pre_POST += strip_creator  # pylint: disable=no-member
 
 
 def application_data() -> dict:
@@ -168,6 +183,28 @@ def index() -> tuple:
     return render_template('index.html')
 
 
+@app.route('/api-token-auth', methods=['POST'])
+def secure() -> tuple:
+    """Generate JWT for user
+
+    :return: A http response
+    :rtype: tuple
+    :raises: HTTPException
+    """
+
+    auth = request.authorization
+    expiration = datetime.utcnow() + timedelta(days=365)
+    headers = {"Content-Type": "text/plain"}
+
+    if auth and app.auth.check_auth(auth['username'], auth['password'], None, 'session', 'GET'):
+
+        payload = {**auth, 'exp': expiration, 'iat': datetime.utcnow()}
+        print(payload)
+        return jwt.encode(payload, app.secret_key, algorithm='HS256'), 201, headers
+
+    return abort(401)
+
+
 @swag_from('swagger/generate.yml')
 @app.route("/api/schema/<schema_id>/generate")
 def generate(schema_id: str) -> tuple:
@@ -231,15 +268,39 @@ def get_types() -> tuple:
 
 
 @app.errorhandler(400)
-def bad_request(error: Exception) -> tuple:
+def bad_request(err: HTTPException) -> tuple:
     """Handle bad requests
 
-    :param Exception error: Exception thrown
+    :param HTTPException err: Exception thrown
     :return: A http response
     :rtype: tuple
     """
 
-    return jsonify(_status="ERR", _error={"code": 400, "message": str(error)}), 400
+    return jsonify(_status="ERR", _error={"code": 400, "message": str(err)}), 400, {"Content-Type": "application/json"}
+
+
+@app.errorhandler(401)
+def unauthorized(err: HTTPException) -> tuple:
+    """Unauthorized response
+
+    :param HTTPException err: Error response
+    :return: A http response
+    :rtype: tuple
+    """
+
+    return jsonify(_status="ERR", _error={"code": 401, "message": str(err)}), 401, {"Content-Type": "application/json"}
+
+
+@app.errorhandler(403)
+def forbidden(err: HTTPException) -> tuple:
+    """Forbidden response
+
+    :param HTTPException err: Error response
+    :return: A http response
+    :rtype: tuple
+    """
+
+    return jsonify(_status="ERR", _error={"code": 403, "message": str(err)}), 403, {"Content-Type": "application/json"}
 
 
 # Add environment and health check routes

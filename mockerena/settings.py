@@ -7,16 +7,21 @@
 import os
 import ssl
 from mockerena.models.schema import SCHEMA
+from mockerena.models.user import ACCOUNT, USER
 
 
 URL_PREFIX = 'api'
-DOMAIN = {'schema': SCHEMA}
+DOMAIN = {
+    'account': ACCOUNT,
+    'schema': SCHEMA,
+    'user': USER
+}
 
 HOST = os.environ.get('MOCKERENA_HOST', 'localhost')
 PORT = os.environ.get('MOCKERENA_PORT', 9000)
 BASE_PATH = os.environ.get('MOCKERENA_BASE_PATH', '')
 DEBUG = os.environ.get('MOCKERENA_DEBUG', False)
-SECRET_KEY = os.environ.get('MOCKERENA_SECRET_KEY', None)
+SECRET_KEY = os.environ.get('MOCKERENA_SECRET_KEY', os.urandom(12).hex())
 ENV = os.environ.get('MOCKERENA_ENV', 'development')
 
 RESOURCE_METHODS = ['GET', 'POST']
