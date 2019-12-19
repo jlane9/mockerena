@@ -59,6 +59,7 @@ setup(
         "pytest>=5.2.0",
         "pytest-cov>=2.8.0",
         "pytest-flask>=0.15.0",
+        "pytest-mock>=1.11.2",
         "pytest-pep8>=1.0.0",
         "pytest-pylint>=0.14.0"
     ],

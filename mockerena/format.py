@@ -78,9 +78,6 @@ def generate_xml_template(columns: dict, root_node: str = None) -> str:
         :rtype: str
         """
 
-        if not (isinstance(children, dict) and children):
-            return ''
-
         xml = ''
         nested = []
 

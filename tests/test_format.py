@@ -5,9 +5,11 @@
 """
 
 
+import json
 from flask import url_for
 from eve import Eve
 import pytest
+from mockerena.app import generate_and_format
 from mockerena.format import generate_xml_template
 
 
@@ -111,6 +113,26 @@ def test_generate_xml_with_nested(client: Eve, sample_schema: dict):
 
 
 @pytest.mark.file_format
+def test_generate_xml_not_nested(client: Eve, sample_schema: dict):
+    """Test to ensure xml can be generated without nesting values
+
+    :param Eve client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
+    :raises: AssertionError
+    """
+
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "xml"
+    sample_schema["is_nested"] = False
+    sample_schema["columns"][0]["name"] = "foo.bar"
+    sample_schema["columns"][1]["name"] = "foo.baz"
+
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    assert res.status_code == 200
+    assert res.get_data().decode('utf-8') == '<root><foo.bar>this</foo.bar><foo.baz>that</foo.baz></root>'
+
+
+@pytest.mark.file_format
 def test_generate_xml_with_empty_root(client: Eve, sample_schema: dict):
     """Test to xml can be generated with an empty root
 
@@ -126,3 +148,30 @@ def test_generate_xml_with_empty_root(client: Eve, sample_schema: dict):
     res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
     assert res.status_code == 200
     assert res.get_data().decode('utf-8') == '<foo>this</foo><bar>that</bar>'
+
+
+@pytest.mark.file_format
+def test_generate_and_format_invalid():
+    """Test to xml can be generated with an empty root
+
+    :raises: AssertionError
+    """
+
+    schema = ''
+
+    # noinspection PyTypeChecker
+    res, status_code, _ = generate_and_format(schema)
+
+    error = {
+        "_status": "ERR",
+        "_issues": {
+            "validation exception": "'' is not a document, must be a dict"
+        },
+        "_error": {
+            "code": 422,
+            "message": "Data generation failure: 1 document(s) contain(s) error(s)"
+        }
+    }
+
+    assert status_code == 422
+    assert json.loads(res) == error
