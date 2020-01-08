@@ -29,9 +29,7 @@ SCHEMA = {
         "file_name": {
             "type": "string",
             "minlength": 3,
-            "maxlength": 64,
-            "unique": True,
-            "required": True
+            "maxlength": 64
         },
         "include_header": {"type": "boolean"},
         "exclude_null": {"type": "boolean"},
@@ -96,4 +94,3 @@ SCHEMA = {
 # Build a schema for custom_schema route
 CUSTOM_SCHEMA = deepcopy(SCHEMA["schema"])
 del CUSTOM_SCHEMA["schema"]["unique"]
-del CUSTOM_SCHEMA["file_name"]["unique"]

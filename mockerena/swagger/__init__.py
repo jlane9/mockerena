@@ -425,8 +425,7 @@ TEMPLATE = {
                 }
             },
             "required": [
-                "schema",
-                "file_name"
+                "schema"
             ]
         },
         "environment": {
