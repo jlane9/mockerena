@@ -50,7 +50,7 @@ class MockProvider(BaseProvider):
         return round(random.uniform(minimum, maximum), 2)
 
     # noinspection PyMethodMayBeStatic
-    def weighted_choice(self, elements: list, weights: list = None) -> Any:  # pylint: disable=R0201
+    def weighted_choice(self, elements: list = None, weights: list = None) -> Any:  # pylint: disable=R0201
         """Returns a random element from a list of weighted choices
 
         :param list elements: List of choices
@@ -60,7 +60,13 @@ class MockProvider(BaseProvider):
         :raises: AssertionError
         """
 
+        if elements is None:
+            elements = ['a', 'b', 'c']
+
+        if weights is None:
+            weights = [1, 2, 3]
+
         if not all([isinstance(attr, (list, tuple)) for attr in (elements, weights)]):
             raise ValueError('`elements` and `weights` must both be lists')
 
-        return random.choices(elements, weights=weights)[0]
+        return random.choices(elements, weights=weights)[0] if elements and weights else None
