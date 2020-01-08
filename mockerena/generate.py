@@ -37,6 +37,28 @@ def age(date: Union[datetime.datetime, datetime.date]) -> int:
         else now.year - date.year
 
 
+def parse_timedelta(string: str):
+    """
+
+    :param string:
+    :return:
+    """
+
+    match = re.search(r'(?:(?P<days>[+-]\d+) days, )?(?P<time>(?:\d{1,2}:){2}(?:\d{1,2}))', string)
+
+    if not match:
+        raise TypeError(f"Error: '{string}' is not a valid timedelta string")
+
+    time = datetime.datetime.strptime(match.group('time'), "%H:%M:%S")
+
+    return datetime.timedelta(
+        days=int(match.group('days')) if match.group('days') else 0,
+        hours=time.hour,
+        minutes=time.minute,
+        seconds=time.second
+    )
+
+
 APPROVED_GLOBALS = {
     'abs': abs,
     'age': age,
@@ -59,6 +81,7 @@ APPROVED_GLOBALS = {
     'month': lambda d: d.month if isinstance(d, (datetime.datetime, datetime.date)) else d,
     'now': datetime.datetime.now,
     'parse_date': datetime.datetime.strptime,
+    'parse_timedelta': parse_timedelta,
     'pow': pow,
     'request_param': lambda param: request.args.get(param, None),
     'range': range,
