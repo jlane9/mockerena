@@ -5,9 +5,11 @@
 """
 
 import datetime
+import decimal
 import random
 import re
-from typing import Union
+from types import GeneratorType
+from typing import Any, Union
 
 from faker import Faker
 from flask import request
@@ -99,6 +101,45 @@ def is_safe(expression: str) -> bool:
     return bool(re.match(PATTERN, str(expression)))
 
 
+def make_safe(datum: Any, column: dict = None) -> Union[dict, float, int, list, str]:  #
+    """Convert datum item to JSON safe output
+
+    :param Any datum: Datum item
+    :param dict column: Column data
+    :return: JSON serializable output
+    :rtype: dict, float, int, list, str
+    """
+
+    def format_date(item: Union[datetime.date, datetime.datetime, datetime.time]) -> str:
+        """Return item formatted as a date string
+
+        :param Union[datetime.date, datetime.datetime, datetime.time] item: Date/time object
+        :return: Datetime string
+        :rtype: str
+        """
+
+        return item.strftime(column['format']) if column and 'format' in column else item.isoformat()
+
+    functions = {
+        bytes: lambda item: item.decode('utf-8', errors="ignore"),
+        datetime.date: format_date,
+        datetime.datetime: format_date,
+        datetime.time: format_date,
+        datetime.timedelta: str,
+        decimal.Decimal: float,
+        dict: lambda item: {k: make_safe(v, column) for (k, v) in item.items()},
+        list: lambda item: [make_safe(i, column) for i in item],
+        set: lambda item: [make_safe(i, column) for i in item],
+        tuple: lambda item: [make_safe(i, column) for i in item],
+        GeneratorType: lambda item: [make_safe(i, column) for i in item],
+    }
+
+    if isinstance(datum, (datetime.date, datetime.datetime, datetime.time)):
+        return datum.strftime(column['format']) if column and 'format' in column else datum.isoformat()
+
+    return functions.get(type(datum), lambda item: item)(datum)
+
+
 def data_for_column(column: dict, kwargs: dict, size: int) -> list:
     """Generates data for schema column
 
@@ -127,10 +168,7 @@ def data_for_column(column: dict, kwargs: dict, size: int) -> list:
         else:
             datum = method(**kwargs)
 
-            if isinstance(datum, (datetime.date, datetime.datetime)):
-                datum = datum.strftime(column['format']) if 'format' in column else datum.isoformat()
-
-            data.append(datum)
+            data.append(make_safe(datum, column))
 
     return data
 

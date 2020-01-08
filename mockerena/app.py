@@ -11,6 +11,8 @@ import inspect
 import json
 import logging
 import os
+import re
+import uuid
 
 from bson.objectid import ObjectId
 from cerberus import Validator
@@ -24,7 +26,7 @@ from pymongo.errors import ServerSelectionTimeoutError
 from mockerena import __author__, __email__, __version__
 from mockerena.errors import ERROR_404, ERROR_422
 from mockerena.format import format_output
-from mockerena.generate import fake, generate_data
+from mockerena.generate import fake, generate_data, make_safe
 from mockerena.models.schema import CUSTOM_SCHEMA
 from mockerena.settings import DEBUG, DEFAULT_FILE_FORMAT, DEFAULT_INCLUDE_HEAD, DEFAULT_SIZE, \
     DEFAULT_QUOTE_CHARACTER, DEFAULT_EXCLUDE_NULL, DEFAULT_DELIMITER, DEFAULT_KEY_SEPARATOR, \
@@ -95,10 +97,27 @@ def get_provider_types() -> dict:
     :rtype: dict
     """
 
-    def is_generator(method):
+    def is_generator(method) -> bool:
         return inspect.ismethod(method) and issubclass(type(method.__self__), BaseProvider)
 
-    return {gen[0]: inspect.getdoc(gen[1]) for gen in inspect.getmembers(fake, predicate=is_generator)}
+    return {
+        gen[0]: {
+            'module': re.sub(
+                r'((?:(?:faker|mockerena)\.providers\.?)|\.?en_US)', '', inspect.getmodule(gen[1]).__name__
+            ),
+            'method': gen[0],
+            'display': gen[0].replace('_', ' ').title(),
+            'doc': inspect.getdoc(gen[1]),
+            'examples': make_safe([gen[1]() for _ in range(2)]) if gen[0] != 'binary' else None,
+            'args': {
+                str(key): {
+                    "name": str(param.name),
+                    "default": make_safe(param.default) if not param.empty else None
+                }
+                for (key, param) in inspect.signature(gen[1]).parameters.items()
+            }
+        } for gen in inspect.getmembers(fake, predicate=is_generator)
+    }
 
 
 def generate_and_format(schema: dict) -> tuple:
