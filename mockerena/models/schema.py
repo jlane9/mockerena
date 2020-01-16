@@ -50,11 +50,14 @@ SCHEMA = {
                 "type": "dict",
                 "schema": {
                     "type": STRING,
-                    "name": STRING,
+                    "name": {
+                        "type": "string",
+                        "required": True
+                    },
                     "format": STRING,
                     "args": {"type": "dict"},
                     "percent_empty": {
-                        "type": "float",
+                        "type": ["float", "integer"],
                         "min": 0,
                         "max": 1
                     },
@@ -77,7 +80,7 @@ SCHEMA = {
                         },
                         "headers": {"type": "dict", "allow_unknown": True},
                         "content_type": {"type": "string"},
-                        "data": {"type": "string"},
+                        "data": STRING,
                         "weight": {
                             "type": "integer",
                             "min": 1

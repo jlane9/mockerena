@@ -533,11 +533,6 @@ TEMPLATE = {
                     "default": DEFAULT_INCLUDE_HEAD,
                     "description": "True, to include header for CSV or TSV. Default is True"
                 },
-                "exclude_null": {
-                    "type": "boolean",
-                    "default": DEFAULT_EXCLUDE_NULL,
-                    "description": "If False, null values are squashed for JSON formats"
-                },
                 "delimiter": {
                     "type": "string",
                     "default": DEFAULT_DELIMITER,
@@ -547,6 +542,11 @@ TEMPLATE = {
                     "type": "string",
                     "default": DEFAULT_QUOTE_CHARACTER,
                     "description": "Quoting character for CSV or TSV"
+                },
+                "exclude_null": {
+                    "type": "boolean",
+                    "default": DEFAULT_EXCLUDE_NULL,
+                    "description": "If False, null values are squashed for JSON formats"
                 },
                 "is_nested": {
                     "type": "boolean",
@@ -574,6 +574,7 @@ TEMPLATE = {
                     "type": "array",
                     "items": {
                         "type": "object",
+                        "required": ["name"],
                         "properties": {
                             "type": {
                                 "type": "string",
