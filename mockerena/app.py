@@ -34,7 +34,7 @@ from mockerena.models.schema import CUSTOM_SCHEMA
 from mockerena.models.user import default_current_user, verify_is_user
 from mockerena.settings import DEBUG, DEFAULT_FILE_FORMAT, DEFAULT_INCLUDE_HEAD, DEFAULT_SIZE, \
     DEFAULT_QUOTE_CHARACTER, DEFAULT_EXCLUDE_NULL, DEFAULT_DELIMITER, DEFAULT_KEY_SEPARATOR, \
-    DEFAULT_IS_NESTED, DEFAULT_RESPONSES, ENV, HOST, PORT, SECRET_KEY, URL_PREFIX
+    DEFAULT_IS_NESTED, DEFAULT_RESPONSES, ENV, HOST, PORT, SECRET_KEY
 from mockerena.swagger import TEMPLATE
 from mockerena.utils import return_one, strip_creator
 

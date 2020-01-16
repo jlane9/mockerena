@@ -6,6 +6,7 @@
 
 
 from mockerena import __author__, __email__, __version__
+from mockerena.models.common import STRING
 from mockerena.settings import BASE_PATH, ENV, HOST, PORT
 from mockerena.settings import DEFAULT_FILE_FORMAT, DEFAULT_INCLUDE_HEAD, DEFAULT_SIZE, DEFAULT_QUOTE_CHARACTER, \
     DEFAULT_EXCLUDE_NULL, DEFAULT_DELIMITER, DEFAULT_KEY_SEPARATOR, DEFAULT_IS_NESTED
@@ -476,18 +477,10 @@ TEMPLATE = {
         "account": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "first_name": {
-                    "type": "string"
-                },
-                "last_name": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
+                "email": STRING,
+                "first_name": STRING,
+                "last_name": STRING,
+                "username": STRING
             },
             "required": [
                 "email",
@@ -630,12 +623,8 @@ TEMPLATE = {
                                 "additionalProperties": {},
                                 "nullable": True
                             },
-                            "content_type": {
-                                "type": "string"
-                            },
-                            "data": {
-                                "type": "string"
-                            },
+                            "content_type": STRING,
+                            "data": STRING,
                             "weight": {
                                 "type": "integer",
                                 "minimum": 1
@@ -655,21 +644,11 @@ TEMPLATE = {
         "user": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "first_name": {
-                    "type": "string"
-                },
-                "last_name": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                }
+                "email": STRING,
+                "first_name": STRING,
+                "last_name": STRING,
+                "username": STRING,
+                "password": STRING
             },
             "required": [
                 "email",
@@ -683,17 +662,11 @@ TEMPLATE = {
                 "os": {
                     "type": "object",
                     "properties": {
-                        "platform": {
-                            "type": "string"
-                        },
-                        "name": {
-                            "type": "string"
-                        },
+                        "platform": STRING,
+                        "name": STRING,
                         "uname": {
                             "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
+                            "items": STRING
                         }
                     },
                     "required": [
@@ -705,18 +678,10 @@ TEMPLATE = {
                 "application": {
                     "type": "object",
                     "properties": {
-                        "version": {
-                            "type": "string"
-                        },
-                        "maintainer": {
-                            "type": "string"
-                        },
-                        "maintainer_email": {
-                            "type": "string"
-                        },
-                        "git_repo": {
-                            "type": "string"
-                        }
+                        "version": STRING,
+                        "maintainer": STRING,
+                        "maintainer_email": STRING,
+                        "git_repo": STRING
                     },
                     "required": [
                         "version",
@@ -728,27 +693,17 @@ TEMPLATE = {
                 "settings": {
                     "type": "object",
                     "properties": {
-                        "DEFAULT_FILE_FORMAT": {
-                            "type": "string"
-                        },
-                        "DEFAULT_INCLUDE_HEAD": {
-                            "type": "string"
-                        },
+                        "DEFAULT_FILE_FORMAT": STRING,
+                        "DEFAULT_INCLUDE_HEAD": STRING,
                         "DEFAULT_SIZE": {
                             "type": "integer"
                         },
-                        "DEFAULT_QUOTE_CHARACTER": {
-                            "type": "string"
-                        },
+                        "DEFAULT_QUOTE_CHARACTER": STRING,
                         "DEFAULT_EXCLUDE_NULL": {
                             "type": "boolean"
                         },
-                        "DEFAULT_DELIMITER": {
-                            "type": "string"
-                        },
-                        "DEFAULT_KEY_SEPARATOR": {
-                            "type": "string"
-                        },
+                        "DEFAULT_DELIMITER": STRING,
+                        "DEFAULT_KEY_SEPARATOR": STRING,
                         "DEFAULT_IS_NESTED": {
                             "type": "boolean"
                         },
@@ -789,12 +744,8 @@ TEMPLATE = {
         "healthcheck": {
             "type": "object",
             "properties": {
-                "hostname": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                },
+                "hostname": STRING,
+                "status": STRING,
                 "timestamp": {
                     "type": "number"
                 },
@@ -803,12 +754,8 @@ TEMPLATE = {
                     "items": {
                         "type": "object",
                         "properties": {
-                            "checker": {
-                                "type": "string"
-                            },
-                            "output": {
-                                "type": "string"
-                            },
+                            "checker": STRING,
+                            "output": STRING,
                             "passed": {
                                 "type": "boolean"
                             },
@@ -832,9 +779,7 @@ TEMPLATE = {
                         ]
                     }
                 },
-                "version": {
-                    "type": "string"
-                }
+                "version": STRING
             },
             "required": [
                 "hostname",
