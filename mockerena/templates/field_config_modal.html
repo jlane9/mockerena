@@ -1,0 +1,62 @@
+<div id="fieldConfigModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="fieldConfigModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document" style="overflow-y: initial;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="fieldConfigModalLabel">Configure</h5>
+      </div>
+      <div class="modal-body">
+
+        <div class="row" style="padding-bottom: 8px;">
+          <label class="col col-form-label">Arguments</label>
+        </div>
+
+        <div id="arguments">
+          {% include 'argument.html' %}
+        </div>
+
+        <template id="argumentTemplate">
+          {% include 'argument.html' %}
+        </template>
+
+        <div class="row" style="padding-bottom: 32px;">
+          <div class="col-2 offset-1" style="padding-left: 0;">
+            <button class="btn btn-link form-control" type="button" onclick="addArgument()" style="text-decoration: none;">+ Argument</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="fieldFunction">Function</label>
+          <textarea id="fieldFunction" class="form-control" name="fieldFunction" rows="2"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="fieldFunction">Format</label>
+          <input id="fieldFormat" class="form-control" type="text" name="fieldFormat" value="%Y-%m-%d %H:%M:%S"></input>
+        </div>
+
+        <div class="row form-group">
+
+          <label for="fieldPercentEmpty" class="col-xs-12 col-sm-3 col-form-label">Percent Empty</label>
+          <div class="col-xs-12 col-sm-3">
+            <input id="fieldPercentEmpty" class="form-control" name="fieldPercentEmpty" type="number" min="0", max="100" value="0"></input>
+          </div>
+
+          <label for="fieldTruncate" class="col-xs-5 col-sm-5 col-form-label">Truncate</label>
+          <div class="col-xs-1 col-sm-1 form-check" style="text-align: right;">
+            <input id="fieldTruncate" class="form-check-input" type="checkbox" checked>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="saveFieldConfigs()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<input type="hidden" name="args" value="" />
+<input type="hidden" name="format" value="" />

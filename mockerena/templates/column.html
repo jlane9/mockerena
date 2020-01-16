@@ -1,0 +1,54 @@
+<div class="form-row">
+    <div class="col-xs-1">
+        <div class="center">
+            <i class="fas fa-th handle"></i>
+        </div>
+    </div>
+    <div class="col">
+        {% if column %}
+        <input class="form-control" type="text" name="name" value="{{ column.name }}" placeholder="Field name"
+               aria-label="Field Name"/>
+        {% else %}
+        <input class="form-control" type="text" name="name" value="" placeholder="Field name"
+           aria-label="Field Name"/>
+        {% endif %}
+    </div>
+    <div class="input-group col">
+        {% if column %}
+          <input class="form-control" type="text" name="type" value="{{ column.type }}"
+                 placeholder="Field type" aria-label="Field Type" readonly/>
+          {% if column.args %}
+            <input type="hidden" name="args" value='{{ column.args | tojson | safe }}' />
+          {% else %}
+            <input type="hidden" name="args" value="" />
+          {% endif %}
+          <input type="hidden" name="format" value="{{ column.format }}" />
+          <input type="hidden" name="percent_empty" value="0" />
+          <input type="hidden" name="truncate" value="" />
+          <input type="hidden" name="function" value="{{ column.function }}" />
+          <input type="hidden" name="description" value="{{ column.description }}" />
+        {%  else %}
+          <input class="form-control" type="text" name="type" value="" placeholder="Field type" aria-label="Field Type" readonly />
+          <input type="hidden" name="args" value="" />
+          <input type="hidden" name="format" value="" />
+          <input type="hidden" name="percent_empty" value="0" />
+          <input type="hidden" name="truncate" value="" />
+          <input type="hidden" name="function" value="" />
+          <input type="hidden" name="description" value="" />
+        {%  endif %}
+
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" onclick="openModal(this, '#fieldConfigModal')">
+                <i class="fas fa-cog"></i>
+            </button>
+            <button class="btn btn-outline-secondary" type="button" onclick="openModal(this, '#fieldTypeModal')">
+                <i class="fas fa-folder-open"></i>
+            </button>
+        </div>
+    </div>
+    <div class="col-xs-1">
+        <div class="icon-button text-danger" onclick="removeColumn(this)">
+            <i class="fas fa-times"></i>
+        </div>
+    </div>
+</div>

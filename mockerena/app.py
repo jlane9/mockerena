@@ -180,7 +180,43 @@ def index() -> tuple:
     :rtype: tuple
     """
 
-    return render_template('index.html')
+    columns = [
+        {
+            "name": "First Name",
+            "type": "first_name"
+        },
+        {
+            "name": "Last Name",
+            "type": "last_name"
+        },
+        {
+            "name": "Phone Number",
+            "type": "phone_number"
+        },
+        {
+            "name": "Email Address",
+            "type": "email"
+        },
+        {
+            "name": "Gender",
+            "type": "random_element",
+            "args": {
+                "elements": ["M", "F"]
+            }
+        }
+    ]
+
+    provider_map = get_provider_types()
+    providers = provider_map.values()
+    defaults = application_settings()
+
+    return render_template(
+        'index.html',
+        columns=columns,
+        providers=providers,
+        provider_map=provider_map,
+        defaults=defaults
+    )
 
 
 @app.route('/api-token-auth', methods=['POST'])

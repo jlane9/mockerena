@@ -1,0 +1,41 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="#">Mockerena</a>
+    <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#topNavbar"
+        aria-controls="topNavbar"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+    >
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item dropdown">
+                <a
+                    id="documentation"
+                    class="nav-link dropdown-toggle"
+                    href="#"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                >
+                    Documentation
+                </a>
+                <div class="dropdown-menu" aria-labelledby="documentation">
+                    <a class="dropdown-item" href="{{ url_for('flasgger.apidocs') }}">Swagger</a>
+                    <a class="dropdown-item" href="https://mockerena.readthedocs.io/en/latest/?badge=latest">
+                        Read The Docs
+                    </a>
+                    <a class="dropdown-item" href="https://github.com/FanThreeSixty/mockerena">Github</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>

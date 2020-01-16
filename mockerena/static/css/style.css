@@ -1,0 +1,58 @@
+body {
+    padding-top: 5rem;
+}
+
+.app-container {
+    padding: 3rem 1.5rem;
+}
+
+.form-row.header .col-xs-1:first-child {
+    min-width: 28px;
+}
+
+.form-row.header .col-xs-1:last-child {
+    min-width: 21px;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}
+
+.icon-button {
+  top: 50%;
+  transform: translateY(25%);
+  cursor: pointer
+}
+
+.handle {
+  cursor: move;
+}
+
+.center {
+  top: 50%;
+  transform: translateY(25%);
+}
+
+.form-row {
+  padding-bottom: 16px;
+}
+
+.providers.row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.providers .card {
+  border: none;
+  margin-bottom: 16px;
+}
+
+.providers .card:hover {
+  background-color: #f0f0f0;
+}
