@@ -3,176 +3,174 @@
 {% include 'header.html' %}
 
 <body>
-  {% include 'navbar.html' %}
+{% include 'navbar.html' %}
 
-  <main role="main" class="container">
+<main role="main" class="container">
     <div class="app-container">
-      <form id="schema-form" class="noselect">
+        <form id="schemaForm" class="noselect" novalidate>
 
-        <div class="form-row header">
-          <div class="col-xs-1"></div>
-          <div class="col">
-            <label>Field Name</label>
-          </div>
-          <div class="col">
-            <label>Field Type</label>
-          </div>
-          <div class="col-xs-1"></div>
-        </div>
-
-        <div id="columns">
-          {% for column in columns %}
-
-          {% with column=column %}
-          {% include 'column.html' %}
-          {% endwith %}
-
-          {% endfor %}
-        </div>
-
-        <div class="row" style="padding-top: 16px;">
-          <div class="col">
-            <button class="btn btn-primary form-control" type="button" onclick="addColumn()">Add field</button>
-          </div>
-        </div>
-
-        <hr>
-
-        <div class="row form-group">
-          <label for="schema" class="col-2 col-form-label">Name</label>
-          <div class="col-10">
-            <input id="schema" class="form-control" type="text" value="mock_data">
-          </div>
-        </div>
-
-        <div class="row form-group">
-
-          <label for="num_rows" class="col-xs-12 col-sm-2 col-form-label"># rows</label>
-          <div class="col-xs-12 col-sm-4">
-            <input id="num_rows" class="form-control" type="number" min="1" value="{{ defaults.DEFAULT_SIZE }}">
-          </div>
-
-          <label for="file_format" class="col-xs-12 col-sm-2 col-form-label">Format</label>
-          <div class="col-xs-12 col-sm-4">
-            <select id="file_format" class="form-control" onchange="updateFileFormat()">
-              <option value="csv" selected>CSV</option>
-              <option value="tsv">TSV</option>
-              <option value="xml">XML</option>
-              <option value="html">HTML</option>
-              <option value="json">JSON</option>
-              <option value="sql">SQL</option>
-            </select>
-          </div>
-
-        </div>
-
-        <hr>
-
-        <div id="schemaOptions">
-
-          <div id="csvOptions" class="optionGroup">
-            <div class="row form-group">
-              <label for="delimiter" class="col-xs-12 col-sm-2 col-form-label">Delimter</label>
-              <div class="col-xs-12 col-sm-4">
-                <input id="delimiter" class="form-control" type="text" value=",">
-              </div>
-              <label for="quote_character" class="col-xs-12 col-sm-2 col-form-label">Quote character</label>
-              <div class="col-xs-12 col-sm-4">
-                <input id="quote_character" class="form-control" type="text" value='{{ defaults.DEFAULT_QUOTE_CHARACTER }}'>
-              </div>
+            <div class="form-row header">
+                <div class="col-xs-1"></div>
+                <div class="col">
+                    <label class="font-weight-bold">Column Name</label>
+                </div>
+                <div class="col">
+                    <label class="font-weight-bold">Column Type</label>
+                </div>
+                <div class="col-xs-1"></div>
             </div>
-            <div class="row form-group">
-              <label for="include_header" class="offset-6 col-5 col-form-label">Include header</label>
-              <div class="col-1 form-check" style="text-align: right;">
-                <input id="include_header" class="form-check-input" type="checkbox" checked>
-              </div>
-            </div>
-          </div>
 
-          <div id="jsonOptions" class="optionGroup" style="display: none;">
+            <div id="columns">
+                {% for column in columns %}
+                    {% with column=column %}
+                        {% include 'column.html' %}
+                    {% endwith %}
+                {% endfor %}
+            </div>
+
+            <div class="row" style="padding-top: 16px;">
+                <div class="col">
+                    <button id="addField" class="btn btn-primary form-control" type="button" onclick="addColumn()">Add field</button>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row form-group">
+                <label for="schema" class="col-2 col-form-label">Name</label>
+                <div class="col-10">
+                    <input id="schema" class="form-control" type="text" value="mock_data" required />
+                    <div class="invalid-feedback">Name is required</div>
+                </div>
+            </div>
+
             <div class="row form-group">
 
-              <label for="is_nested" class="col-xs-5 col-sm-5 col-form-label">Is nested</label>
-              <div class="col-xs-1 col-sm-1 form-check" style="text-align: right;">
-                <input id="is_nested" class="form-check-input" type="checkbox" checked>
-              </div>
+                <label for="num_rows" class="col-xs-12 col-sm-2 col-form-label"># rows</label>
+                <div class="col-xs-12 col-sm-4">
+                    <input id="num_rows" class="form-control" type="number" min="1" value="{{ defaults.DEFAULT_SIZE }}"
+                           required />
+                    <div class="invalid-feedback">Rows is required and must be greater than zero</div>
+                </div>
 
-              <label for="key_separator" class="col-xs-12 col-sm-3 col-form-label">Key separator</label>
-              <div class="col-xs-12 col-sm-3">
-                <input id="key_separator" class="form-control" type="text" value='{{ defaults.DEFAULT_KEY_SEPARATOR }}'>
-              </div>
+                <label for="file_format" class="col-xs-12 col-sm-2 col-form-label">Format</label>
+                <div class="col-xs-12 col-sm-4">
+                    <select id="file_format" class="form-control" onchange="updateFileFormat()">
+                        <option value="csv" selected>CSV</option>
+                        <option value="tsv">TSV</option>
+                        <option value="xml">XML</option>
+                        <option value="html">HTML</option>
+                        <option value="json">JSON</option>
+                        <option value="sql">SQL</option>
+                    </select>
+                </div>
 
             </div>
-            <div class="row form-group">
-              <label for="exclude_null" class="col-5 col-form-label">Exclude null</label>
-              <div class="col-1 form-check" style="text-align: right;">
-                <input id="exclude_null" class="form-check-input" type="checkbox" checked>
-              </div>
+
+            <hr>
+
+            <div id="schemaOptions">
+
+                <div id="csvOptions" class="optionGroup">
+                    <div class="row form-group">
+                        <label for="delimiter" class="col-xs-12 col-sm-2 col-form-label">Delimiter</label>
+                        <div class="col-xs-12 col-sm-4">
+                            <input id="delimiter" class="form-control" type="text" value=",">
+                        </div>
+                        <label for="quote_character" class="col-xs-12 col-sm-2 col-form-label">Quote character</label>
+                        <div class="col-xs-12 col-sm-4">
+                            <input id="quote_character" class="form-control" type="text"
+                                   value='{{ defaults.DEFAULT_QUOTE_CHARACTER }}'>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="include_header" class="offset-6 col-5 col-form-label">Include header</label>
+                        <div class="col-1 form-check" style="text-align: right;">
+                            <input id="include_header" class="form-check-input" type="checkbox" checked>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="jsonOptions" class="optionGroup" style="display: none;">
+                    <div class="row form-group">
+
+                        <label for="is_nested" class="col-xs-5 col-sm-5 col-form-label">Is nested</label>
+                        <div class="col-xs-1 col-sm-1 form-check" style="text-align: right;">
+                            <input id="is_nested" class="form-check-input" type="checkbox" checked>
+                        </div>
+
+                        <label for="key_separator" class="col-xs-12 col-sm-3 col-form-label">Key separator</label>
+                        <div class="col-xs-12 col-sm-3">
+                            <input id="key_separator" class="form-control" type="text"
+                                   value='{{ defaults.DEFAULT_KEY_SEPARATOR }}'>
+                        </div>
+
+                    </div>
+                    <div class="row form-group">
+                        <label for="exclude_null" class="col-5 col-form-label">Exclude null</label>
+                        <div class="col-1 form-check" style="text-align: right;">
+                            <input id="exclude_null" class="form-check-input" type="checkbox" checked>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="xmlOptions" class="optionGroup" style="display: none;">
+                    <div class="row form-group">
+                        <label for="root_node" class="col-xs-12 col-sm-2 col-form-label">Root node</label>
+                        <div class="col-xs-12 col-sm-4">
+                            <input id="root_node" class="form-control" type="text" value="">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="templateOptions" class="optionGroup" style="display: none;">
+                    <div class="row form-group">
+                        <label for="template" class="col-12 col-form-label">Template</label>
+                        <div class="col-12">
+                            <textarea id="template" class="form-control" rows="5"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="sqlOptions" class="optionGroup" style="display: none;">
+                    <div class="row form-group">
+                        <label for="table_name" class="col-xs-12 col-sm-2 col-form-label">Table name</label>
+                        <div class="col-xs-12 col-sm-10">
+                            <input id="table_name" class="form-control" type="text" value="">
+                        </div>
+                    </div>
+                </div>
+
             </div>
-          </div>
 
-          <div id="xmlOptions" class="optionGroup" style="display: none;">
-            <div class="row form-group">
-              <label for="root_node" class="col-xs-12 col-sm-2 col-form-label">Root node</label>
-              <div class="col-xs-12 col-sm-4">
-                <input id="root_node" class="form-control" type="text" value="">
-              </div>
+            <div class="row" style="padding-top: 16px;">
+                <div class="col">
+                    <button id="downloadData" class="btn btn-primary form-control" type="button" onclick="generateData()">Download
+                    </button>
+                </div>
             </div>
-          </div>
 
-          <div id="templateOptions" class="optionGroup" style="display: none;">
-            <div class="row form-group">
-              <label for="template" class="col-12 col-form-label">Template</label>
-              <div class="col-12">
-                <textarea id="template" class="form-control" rows="5"></textarea>
-              </div>
-            </div>
-          </div>
+        </form>
 
-          <div id="sqlOptions" class="optionGroup" style="display: none;">
-            <div class="row form-group">
-              <label for="table_name" class="col-xs-12 col-sm-2 col-form-label">Table name</label>
-              <div class="col-xs-12 col-sm-10">
-                <input id="table_name" class="form-control" type="text" value="">
-              </div>
-            </div>
-          </div>
+        {% include 'field_config_modal.html' %}
+        {% include 'field_type_modal.html' %}
 
-        </div>
-
-        <div class="row" style="padding-top: 16px;">
-          <div class="col">
-            <button class="btn btn-primary form-control" type="button" onclick="generateData()">Download</button>
-          </div>
-        </div>
-
-      </form>
-
-      {% include 'field_config_modal.html' %}
-      {% include 'field_type_modal.html' %}
-
-      <template id="columnTemplate">
-        {% include 'column.html' %}
-      </template>
+        <template id="columnTemplate">
+            {% include 'column.html' %}
+        </template>
 
     </div>
-  </main>
+</main>
 
-  <footer class="mt-auto py-3" style="background-color: #f5f5f5;">
-    <div class="container">
-      <span class="text-muted">© 2020 FanThreeSixty</span>
-    </div>
-  </footer>
-
-  <script>
-    var providers = {{ provider_map | tojson }};
-  </script>
-  <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/font-awesome.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/dragula.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script>
+    let providers = {{ provider_map | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/font-awesome.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dragula.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 </body>
 

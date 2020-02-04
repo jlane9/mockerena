@@ -51,8 +51,20 @@ body {
 .providers .card {
   border: none;
   margin-bottom: 16px;
+  min-height: 132px;
 }
 
 .providers .card:hover {
   background-color: #f0f0f0;
+}
+
+.modal-scroll {
+  overflow-y: scroll;
+  max-height: 78vh;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.modal-scroll::-webkit-scrollbar {
+    display: none;
 }

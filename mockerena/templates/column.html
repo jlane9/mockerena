@@ -6,36 +6,38 @@
     </div>
     <div class="col">
         {% if column %}
-        <input class="form-control" type="text" name="name" value="{{ column.name }}" placeholder="Field name"
-               aria-label="Field Name"/>
+            <input class="form-control" type="text" name="name" value="{{ column.name }}" placeholder="Column name"
+                   required
+                   aria-label="Column Name" />
         {% else %}
-        <input class="form-control" type="text" name="name" value="" placeholder="Field name"
-           aria-label="Field Name"/>
+            <input class="form-control" type="text" name="name" value="" placeholder="Column name" required
+                   aria-label="Column Name" />
         {% endif %}
     </div>
     <div class="input-group col">
         {% if column %}
-          <input class="form-control" type="text" name="type" value="{{ column.type }}"
-                 placeholder="Field type" aria-label="Field Type" readonly/>
-          {% if column.args %}
-            <input type="hidden" name="args" value='{{ column.args | tojson | safe }}' />
-          {% else %}
+            <input class="form-control" type="text" name="type" value="{{ column.type }}"
+                   placeholder="Column type" aria-label="Column Type" required readonly />
+            {% if column.args %}
+                <input type="hidden" name="args" value='{{ column.args | tojson | safe }}' />
+            {% else %}
+                <input type="hidden" name="args" value="" />
+            {% endif %}
+            <input type="hidden" name="format" value="{{ column.format }}" />
+            <input type="hidden" name="percent_empty" value="0" />
+            <input type="hidden" name="truncate" value="" />
+            <input type="hidden" name="function" value="{{ column.function }}" />
+            <input type="hidden" name="description" value="{{ column.description }}" />
+        {% else %}
+            <input class="form-control" type="text" name="type" value="" placeholder="Column type"
+                   aria-label="Column Type" readonly />
             <input type="hidden" name="args" value="" />
-          {% endif %}
-          <input type="hidden" name="format" value="{{ column.format }}" />
-          <input type="hidden" name="percent_empty" value="0" />
-          <input type="hidden" name="truncate" value="" />
-          <input type="hidden" name="function" value="{{ column.function }}" />
-          <input type="hidden" name="description" value="{{ column.description }}" />
-        {%  else %}
-          <input class="form-control" type="text" name="type" value="" placeholder="Field type" aria-label="Field Type" readonly />
-          <input type="hidden" name="args" value="" />
-          <input type="hidden" name="format" value="" />
-          <input type="hidden" name="percent_empty" value="0" />
-          <input type="hidden" name="truncate" value="" />
-          <input type="hidden" name="function" value="" />
-          <input type="hidden" name="description" value="" />
-        {%  endif %}
+            <input type="hidden" name="format" value="" />
+            <input type="hidden" name="percent_empty" value="0" />
+            <input type="hidden" name="truncate" value="" />
+            <input type="hidden" name="function" value="" />
+            <input type="hidden" name="description" value="" />
+        {% endif %}
 
         <div class="input-group-append">
             <button class="btn btn-outline-secondary" type="button" onclick="openModal(this, '#fieldConfigModal')">
