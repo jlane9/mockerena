@@ -11,7 +11,7 @@ import pytest
 
 @pytest.mark.index
 def test_index(client: Eve):
-    """To to ensure index page successfully returns
+    """Test to ensure index page successfully returns
 
     :param Eve client: Mockerena app instance
     :raises: AssertionError

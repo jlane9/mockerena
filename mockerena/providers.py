@@ -57,7 +57,7 @@ class MockProvider(BaseProvider):
         :param list weights: Weights to give each choice. Must be equal length to elements
         :return: A single element from the list
         :rtype: Any
-        :raises: AssertionError
+        :raises: ValueError
         """
 
         if elements is None:

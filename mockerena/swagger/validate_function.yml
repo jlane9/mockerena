@@ -1,0 +1,16 @@
+Returns true if function is valid, false otherwise
+---
+responses:
+  200:
+    description: OK
+    content:
+        application/json:
+          schema:
+            type: string
+            example: true
+  301:
+    $ref: "#/responses/movedPermanently"
+  500:
+    $ref: "#/responses/internalServerError"
+tags:
+  - default

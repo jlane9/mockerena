@@ -37,11 +37,13 @@ def age(date: Union[datetime.datetime, datetime.date]) -> int:
         else now.year - date.year
 
 
-def parse_timedelta(string: str):
-    """
+def parse_timedelta(string: str) -> datetime.timedelta:
+    """Parse string and return timedelta instance
 
-    :param string:
-    :return:
+    :param str string: Timedelta string
+    :return: Timedelta instance
+    :rtype: datetime.timedelta
+    :raises: TypeError
     """
 
     match = re.search(r'(?:(?P<days>[+-]\d+) days, )?(?P<time>(?:\d{1,2}:){2}(?:\d{1,2}))', string)

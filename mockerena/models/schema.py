@@ -5,13 +5,11 @@
 """
 
 from copy import deepcopy
-from mockerena.auth import MockerenaTokenAuth
 from mockerena.models.common import BOOLEAN, STRING
 
 
 SCHEMA = {
     "auth_field": "creator",
-    "authentication": MockerenaTokenAuth,
     "item_title": "schema",
     "schema": {
         "schema": {

@@ -29,7 +29,7 @@ from mockerena import __author__, __email__, __version__
 from mockerena.auth import MockerenaBasicAuth, hash_password
 from mockerena.errors import ERROR_404, ERROR_422
 from mockerena.format import format_output
-from mockerena.generate import fake, generate_data, make_safe
+from mockerena.generate import fake, generate_data, make_safe, PATTERN
 from mockerena.models.schema import CUSTOM_SCHEMA
 from mockerena.models.user import default_current_user, verify_is_user
 from mockerena.settings import DEBUG, DEFAULT_FILE_FORMAT, DEFAULT_INCLUDE_HEAD, DEFAULT_SIZE, \
@@ -301,6 +301,18 @@ def get_types() -> tuple:
     """
 
     return json.dumps(get_provider_types()), 200, {'Content-Type': 'application/json'}
+
+
+@swag_from('swagger/validate_function.yml')
+@app.route("/api/validate-function", methods=['POST'])
+def validate_function() -> tuple:
+    """Returns all available generator types
+
+    :return: A http response
+    :rtype: tuple
+    """
+
+    return json.dumps(bool(re.match(PATTERN, request.data.decode("utf-8")))), 200, {'Content-Type': 'application/json'}
 
 
 @app.errorhandler(400)

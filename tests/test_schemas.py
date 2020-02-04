@@ -6,39 +6,57 @@
 """
 
 from datetime import datetime
-import pytest
 from eve import Eve
 from flask import url_for
+import pytest
+import requests.auth as auth
 
 
 @pytest.mark.schema
-def test_get_all_schemas(client: Eve):
+def test_get_all_schemas(client: Eve, account: dict):
     """Tests that results are returned for get_all_schemas
 
     :param Eve client: Mockerena app instance
+    :param dict account: Account information
     :raises: AssertionError
     """
 
-    res = client.get(url_for('schema|resource'))
+    headers = {
+        'Authorization': auth._basic_auth_str(  # pylint: disable=protected-access
+            account['username'],
+            account['password']
+        )
+    }
+
+    res = client.get(url_for('schema|resource'), headers=headers)
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert res.json
 
 
 @pytest.mark.schema
-def test_generate_by_schema_id(client: Eve):
+def test_generate_by_schema_id(client: Eve, account: dict):
     """Test to ensure a user can generate data for a schema by id
 
     :param Eve client: Mockerena app instance
+    :param dict account: Account information
     :raises: AssertionError
     """
 
-    res = client.get(url_for('schema|item_lookup', _id='mock_example'))
+    headers = {
+        'Authorization': auth._basic_auth_str(  # pylint: disable=protected-access
+            account['username'],
+            account['password']
+        ),
+        'Content-Type': 'application/json'
+    }
+
+    res = client.get(url_for('schema|item_lookup', _id='mock_example'), headers=headers)
     assert res.status_code == 200
 
     data = res.json
 
-    res = client.get(url_for('generate', schema_id=data['_id']))
+    res = client.get(url_for('generate', schema_id=data['_id']), headers=headers)
     assert res.status_code == 200
     assert res.mimetype == 'text/csv'
 
@@ -62,17 +80,25 @@ def test_missing_generate_schema(client: Eve):
 
 
 @pytest.mark.schema
-def test_missing_schema(client: Eve):
+def test_missing_schema(client: Eve, account: dict):
     """Test to ensure a missing schema returns a 500
 
     :param Eve client: Mockerena app instance
+    :param dict account: Account information
     :raises: AssertionError
     """
+
+    headers = {
+        'Authorization': auth._basic_auth_str(  # pylint: disable=protected-access
+            account['username'],
+            account['password']
+        )
+    }
 
     message = "The requested URL was not found on the server. If you entered the URL manually please " \
               "check your spelling and try again."
 
-    res = client.get(url_for('schema|item_lookup', _id='foo_bar'))
+    res = client.get(url_for('schema|item_lookup', _id='foo_bar'), headers=headers)
     assert res.status_code == 404
     assert res.json["_status"] == "ERR"
     assert res.json["_error"]["code"] == 404

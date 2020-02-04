@@ -184,3 +184,17 @@ def test_provider_empty(client: Eve, sample_schema: dict):
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert res.json[0]['foo'] == ""
+
+
+@pytest.mark.provider
+def test_get_provider_types(client: Eve):
+    """Test to ensure route to retrieve provider types functions
+
+    :param Eve client: Mockerena app instance
+    :raises: AssertionError
+    """
+
+    res = client.get(url_for('get_types'), headers={'Content-Type': "application/json"})
+    assert res.status_code == 200
+    assert res.mimetype == 'application/json'
+    assert res.json

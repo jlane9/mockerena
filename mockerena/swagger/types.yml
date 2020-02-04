@@ -4,10 +4,33 @@ responses:
   200:
     description: OK
     content:
-        application/binary:
+        application/json:
           schema:
-            type: string
-            format: binary
+            type: object
+            additionalProperties:
+              type: object
+              properties:
+                module:
+                  type: string
+                method:
+                  type: string
+                display:
+                  type: string
+                doc:
+                  type: string
+                examples:
+                  type: array
+                  items:
+                    type: string
+                args:
+                  type: object
+                  additionalProperties:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      default:
+                        type: [array, boolean, integer, null, number, object, string]
   301:
     $ref: "#/responses/movedPermanently"
   500:
