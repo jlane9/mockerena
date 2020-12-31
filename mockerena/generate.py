@@ -104,7 +104,7 @@ APPROVED_TERMS = [
     "[\\+\\-\\*{1,2}\\/{1,2}%]",  # Operators
     "(?:and|f?or|!=|={2}|i[sn]|not|>=?|<=?|)",  # Logic
     "(?:if|else)",  # Conditionals
-    "(?:True|False|None|-?\\d+|\"{2}|\'{2}|\'[\\w\\\\/,: ]+\'|\"[\\w\\\\/,: ]+\")",  # Built-ins
+    "(?:True|False|None|-?\\d+|\"{2}|\'{2}|\'[^\']+\'|\"[^\"]+\")",  # Built-ins
     f"(?:{'|'.join(APPROVED_GLOBALS)})\\.?\\([\\w\\'\\\"\\[\\]\\(\\)\\\\+\\%*,-: ]+\\)",  # Functions
     "(?:fake|request_param)\\.[\\w]+\\([\\w\\'\\\"\\[\\]\\(\\)\\{\\}\\+*,-: ]*\\)",  # Faker
     "(?:this|field\\[[\'\"][\\w\\. ]+[\'\"]\\])",  # Variables

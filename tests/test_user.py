@@ -7,7 +7,7 @@
 from flask import url_for
 from eve import Eve
 import pytest
-import requests.auth as auth
+from tests.utils import build_basic_auth_str
 
 
 @pytest.mark.user
@@ -38,7 +38,7 @@ def test_create(client: Eve):
     # Remove test artifact
     headers = {
         'If-Match': data['_etag'],
-        'Authorization': auth._basic_auth_str(acc['username'], acc['password'])  # pylint: disable=protected-access
+        'Authorization': build_basic_auth_str(acc)
     }
     response = client.delete(url_for('account|item_lookup', _id=data['_id']), headers=headers)
     assert response.status_code == 204
@@ -54,12 +54,7 @@ def test_get_denied(client: Eve, account: dict):
     :raises: AssertionError
     """
 
-    headers = {
-        'Authorization': auth._basic_auth_str(  # pylint: disable=protected-access
-            account['username'],
-            account['password']
-        )
-    }
+    headers = {'Authorization': build_basic_auth_str(account)}
 
     response = client.get(url_for('user|resource'), headers=headers)
     assert response.status_code == 405
@@ -75,12 +70,7 @@ def test_get_with_id_denied(client: Eve, account: dict):
     :raises: AssertionError
     """
 
-    headers = {
-        'Authorization': auth._basic_auth_str(  # pylint: disable=protected-access
-            account['username'],
-            account['password']
-        )
-    }
+    headers = {'Authorization': build_basic_auth_str(account)}
 
     response = client.get(url_for('user|item_lookup', _id=account['_id']), headers=headers)
     assert response.status_code == 405
@@ -96,12 +86,7 @@ def test_get_with_username_denied(client: Eve, account: dict):
     :raises: AssertionError
     """
 
-    headers = {
-        'Authorization': auth._basic_auth_str(  # pylint: disable=protected-access
-            account['username'],
-            account['password']
-        )
-    }
+    headers = {'Authorization': build_basic_auth_str(account)}
 
     response = client.get(url_for('user|item_lookup', _id=account['username']), headers=headers)
     assert response.status_code == 404

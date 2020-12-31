@@ -8,8 +8,7 @@ import copy
 from flask import url_for
 from eve import Eve
 import pytest
-import requests.auth as auth
-from tests.utils import create_account, delete_account, update_account
+from tests.utils import build_basic_auth_str, create_account, delete_account, update_account
 
 
 def verify_get_account_response(data: dict, account: dict):
@@ -35,12 +34,7 @@ def build_basic_auth_headers(account: dict) -> dict:
     :rtype: dict
     """
 
-    return {
-        'Authorization': auth._basic_auth_str(  # pylint: disable=protected-access
-            account['username'],
-            account['password']
-        )
-    }
+    return {'Authorization': build_basic_auth_str(account)}
 
 
 @pytest.mark.account
@@ -105,9 +99,7 @@ def test_get_with_token(client: Eve, account: dict, token_auth: str):
     :raises: AssertionError
     """
 
-    headers = {
-        'Authorization': f"Bearer {token_auth}"
-    }
+    headers = {'Authorization': f"Bearer {token_auth}"}
 
     response = client.get(url_for('account|resource'), headers=headers)
 
@@ -126,9 +118,7 @@ def test_get_with_id_with_token(client: Eve, account: dict, token_auth: str):
     :raises: AssertionError
     """
 
-    headers = {
-        'Authorization': f"Bearer {token_auth}"
-    }
+    headers = {'Authorization': f"Bearer {token_auth}"}
 
     response = client.get(url_for('account|item_lookup', _id=account['_id']), headers=headers)
 
@@ -147,9 +137,7 @@ def test_get_with_username_with_token(client: Eve, account: dict, token_auth: st
     :raises: AssertionError
     """
 
-    headers = {
-        'Authorization': f"Bearer {token_auth}"
-    }
+    headers = {'Authorization': f"Bearer {token_auth}"}
 
     response = client.get(url_for('account|item_lookup', _id=account['username']), headers=headers)
 
@@ -209,10 +197,7 @@ def test_delete(client: Eve, account: dict):
     """
 
     headers = {
-        'Authorization': auth._basic_auth_str(  # pylint: disable=protected-access
-            account['username'],
-            account['password']
-        ),
+        'Authorization': build_basic_auth_str(account),
         'If-Match': account['_etag']
     }
 
@@ -231,10 +216,7 @@ def test_delete_with_id(client: Eve, account: dict):
     """
 
     headers = {
-        'Authorization': auth._basic_auth_str(  # pylint: disable=protected-access
-            account['username'],
-            account['password']
-        ),
+        'Authorization': build_basic_auth_str(account),
         'If-Match': account['_etag']
     }
 
@@ -253,10 +235,7 @@ def test_delete_with_username(client: Eve, account: dict):
     """
 
     headers = {
-        'Authorization': auth._basic_auth_str(  # pylint: disable=protected-access
-            account['username'],
-            account['password']
-        ),
+        'Authorization': build_basic_auth_str(account),
         'If-Match': account['_etag']
     }
 
@@ -335,10 +314,7 @@ def test_put(client: Eve, account: dict):
     """
 
     headers = {
-        'Authorization': auth._basic_auth_str(  # pylint: disable=protected-access
-            account['username'],
-            account['password']
-        ),
+        'Authorization': build_basic_auth_str(account),
         'If-Match': account['_etag']
     }
 
@@ -360,10 +336,7 @@ def test_put_with_id(client: Eve, account: dict):
     """
 
     headers = {
-        'Authorization': auth._basic_auth_str(  # pylint: disable=protected-access
-            account['username'],
-            account['password']
-        ),
+        'Authorization': build_basic_auth_str(account),
         'If-Match': account['_etag']
     }
 
@@ -385,10 +358,7 @@ def test_put_with_username(client: Eve, account: dict):
     """
 
     headers = {
-        'Authorization': auth._basic_auth_str(  # pylint: disable=protected-access
-            account['username'],
-            account['password']
-        ),
+        'Authorization': build_basic_auth_str(account),
         'If-Match': account['_etag']
     }
 
@@ -479,10 +449,7 @@ def test_patch(client: Eve, account: dict):
     """
 
     headers = {
-        'Authorization': auth._basic_auth_str(  # pylint: disable=protected-access
-            account['username'],
-            account['password']
-        ),
+        'Authorization': build_basic_auth_str(account),
         'If-Match': account['_etag']
     }
 
@@ -501,10 +468,7 @@ def test_patch_with_id(client: Eve, account: dict):
     """
 
     headers = {
-        'Authorization': auth._basic_auth_str(  # pylint: disable=protected-access
-            account['username'],
-            account['password']
-        ),
+        'Authorization': build_basic_auth_str(account),
         'If-Match': account['_etag']
     }
 
@@ -522,10 +486,7 @@ def test_patch_with_username(client: Eve, account: dict):
     """
 
     headers = {
-        'Authorization': auth._basic_auth_str(  # pylint: disable=protected-access
-            account['username'],
-            account['password']
-        ),
+        'Authorization': build_basic_auth_str(account),
         'If-Match': account['_etag']
     }
 
@@ -615,7 +576,7 @@ def test_patch_unauthorized(client: Eve, account: dict):
 
     # Edit existing account with new account
     headers = {
-        'Authorization': auth._basic_auth_str(acc['username'], acc['password']),  # pylint: disable=protected-access
+        'Authorization': build_basic_auth_str(acc),
         'If-Match': account['_etag']
     }
 
@@ -644,7 +605,7 @@ def test_delete_unauthorized(client: Eve, account: dict):
 
     # Edit existing account with new account
     headers = {
-        'Authorization': auth._basic_auth_str(acc['username'], acc['password']),  # pylint: disable=protected-access
+        'Authorization': build_basic_auth_str(acc),
         'If-Match': account['_etag']
     }
 

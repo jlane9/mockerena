@@ -9,7 +9,7 @@ from datetime import datetime
 from eve import Eve
 from flask import url_for
 import pytest
-import requests.auth as auth
+from tests.utils import build_basic_auth_str
 
 
 @pytest.mark.schema
@@ -21,12 +21,7 @@ def test_get_all_schemas(client: Eve, account: dict):
     :raises: AssertionError
     """
 
-    headers = {
-        'Authorization': auth._basic_auth_str(  # pylint: disable=protected-access
-            account['username'],
-            account['password']
-        )
-    }
+    headers = {'Authorization': build_basic_auth_str(account)}
 
     res = client.get(url_for('schema|resource'), headers=headers)
     assert res.status_code == 200
@@ -44,10 +39,7 @@ def test_generate_by_schema_id(client: Eve, account: dict):
     """
 
     headers = {
-        'Authorization': auth._basic_auth_str(  # pylint: disable=protected-access
-            account['username'],
-            account['password']
-        ),
+        'Authorization': build_basic_auth_str(account),
         'Content-Type': 'application/json'
     }
 
@@ -88,12 +80,7 @@ def test_missing_schema(client: Eve, account: dict):
     :raises: AssertionError
     """
 
-    headers = {
-        'Authorization': auth._basic_auth_str(  # pylint: disable=protected-access
-            account['username'],
-            account['password']
-        )
-    }
+    headers = {'Authorization': build_basic_auth_str(account)}
 
     message = "The requested URL was not found on the server. If you entered the URL manually please " \
               "check your spelling and try again."

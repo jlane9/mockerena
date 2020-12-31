@@ -19,7 +19,7 @@ def build_basic_auth_str(acc: dict) -> str:
     :rtype: str
     """
 
-    return auth._basic_auth_str(acc['username'], acc['password'])  # pylint: disable=protected-access
+    return auth._basic_auth_str(acc.get('username'), acc.get('password'))  # pylint: disable=protected-access
 
 
 def create_account(api: Eve, acc: dict):

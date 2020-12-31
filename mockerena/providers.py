@@ -45,8 +45,8 @@ class MockProvider(BaseProvider):
         :rtype: float
         """
 
-        minimum = minimum if isinstance(minimum, int) else 0
-        maximum = maximum if isinstance(maximum, int) else 999999
+        minimum = minimum if isinstance(minimum, (int, float)) else 0
+        maximum = maximum if isinstance(maximum, (int, float)) else 999999
         return round(random.uniform(minimum, maximum), 2)
 
     # noinspection PyMethodMayBeStatic

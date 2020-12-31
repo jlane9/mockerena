@@ -7,6 +7,7 @@
 from flask import url_for
 import pytest
 import requests.auth as auth
+from tests.utils import build_basic_auth_str
 
 
 @pytest.mark.auth
@@ -19,12 +20,7 @@ def test_get_token_auth(client, account):
     :raises: AssertionError
     """
 
-    headers = {
-        'Authorization': auth._basic_auth_str(  # pylint: disable=protected-access
-            account['username'],
-            account['password']
-        )
-    }
+    headers = {'Authorization': build_basic_auth_str(account)}
 
     response = client.post(url_for('secure'), headers=headers)
     assert response.status_code == 201
