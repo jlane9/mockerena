@@ -9,7 +9,7 @@ import decimal
 import random
 import re
 from types import GeneratorType
-from typing import Any, Union
+from typing import Any, Callable, Union
 
 from faker import Faker
 from flask import request
@@ -37,11 +37,30 @@ def age(date: Union[datetime.datetime, datetime.date]) -> int:
         else now.year - date.year
 
 
-def parse_timedelta(string: str):
+def default(func: Callable, default_value: Any, *args, **kwargs) -> Any:
+    """Return default value if function call fails
+
+    :param Callable func: Function to evaluate
+    :param Any default_value: Value to return if exception is thrown
+    :return: Function result or default value
+    :rtype: Any
     """
 
-    :param string:
-    :return:
+    # noinspection PyBroadException
+    try:
+        return func(*args, **kwargs)
+
+    except Exception:
+        return default_value
+
+
+def parse_timedelta(string: str) -> datetime.timedelta:
+    """Convert timedelta string to instance
+
+    :param str string:
+    :return: Timedelta instance
+    :rtype: datetime.timedelta
+    :raises: TypeError
     """
 
     match = re.search(r'(?:(?P<days>[+-]\d+) days, )?(?P<time>(?:\d{1,2}:){2}(?:\d{1,2}))', string)
@@ -67,6 +86,7 @@ APPROVED_GLOBALS = {
     'day': lambda d: d.day if isinstance(d, (datetime.datetime, datetime.date)) else d,
     'date': datetime.date,
     'datetime': datetime.datetime,
+    'default': default,
     'epoch': lambda d: d.timestamp() if isinstance(d, (datetime.datetime, datetime.date)) else d,
     'fake': fake,
     'float': float,
